@@ -27,7 +27,6 @@ const wants = {
       }
     } catch (error) {
       console.error(error);
-      res.json({ status: 500, error: 'Internal Server Error' });
     }
   },
 
@@ -48,7 +47,6 @@ const wants = {
       }
     } catch (error) {
       console.error(error);
-      res.json({ status: 500, error: 'Internal Server Error' });
     }
   },
 
@@ -65,7 +63,6 @@ const wants = {
       }
     } catch (error) {
       console.error(error);
-      res.json({ status: 500, error: 'Internal Server Error' });
     }
   },
 };
