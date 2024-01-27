@@ -14,16 +14,14 @@ const finances = {
                     totalExpenditure: 0
                 });
                 newProfile.save();
-                res.json({ status: 200, finance: newProfile })
+                res.json({ status: 200, finance: newProfile });
             }
             else {
-                res.json({ status: 400, error: 'user for this finance profile does not exist or there is already a profile' })
+                res.json({ status: 400, error: 'user for this finance profile does not exist or there is already a profile'})
             }
         } catch (error) {
-            console.log(error)
-        }
-       
-       
+            console.log(error);
+        }    
     },
     updateFinance: async (req, res) => {
         const id = req.body.id;
@@ -42,7 +40,6 @@ const finances = {
         else {
             res.json({ status: 400, error: 'user for this finance profile does not exist' })
         }
-
     },
     deleteFinance: async (req, res) => {
         const id = req.body.id;
