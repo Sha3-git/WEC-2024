@@ -7,6 +7,7 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -28,13 +29,13 @@ function LoginPage() {
       });
 
       console.log('Login successful:', response.data);
-      if(response.data.status === 200){
-        navigate('/finance')
-        localStorage.setItem('id', response.data.user._id)
+      if (response.data.status === 200) {
+        navigate('/finance');
+        localStorage.setItem('id', response.data.user._id);
       }
     } catch (error) {
-      
       console.error('Login failed:', error.response.data);
+      setLoginError('Invalid email or password. Please try again.'); //set the login error message
     }
   };
 
@@ -50,6 +51,7 @@ function LoginPage() {
               </div>
               <div className="card-body">
                 <form onSubmit={handleLogin}>
+                  {loginError && <div className="alert alert-danger mb-3">{loginError}</div>}
                   <div className="form-group mb-4">
                     <label htmlFor="email">Email:</label>
                     <input

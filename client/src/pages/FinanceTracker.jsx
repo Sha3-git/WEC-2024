@@ -3,9 +3,10 @@ import Header from '../components/Header';
 import axios from 'axios';
 
 function Finance() {
-  const [itemName, setItemName] = useState('');
-  const [itemCost, setItemCost] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const id = localStorage.getItem('id');
+  const [name, setname] = useState('');
+  const [amount, setamount] = useState('');
+  const [card, setcard] = useState('');
   const [category, setCategory] = useState('');
   const [submittedData, setSubmittedData] = useState([]);
   const [showWantsData, setShowWantsData] = useState(false);
@@ -16,31 +17,48 @@ function Finance() {
     e.preventDefault();
 
     const newData = {
-      itemName,
-      itemCost,
-      paymentMethod,
-      category,
+      id,
+      name,
+      amount,
+      card,
     };
 
     try {
-      const response = await axios.post('http://localhost:4000/finance', newData);
-
-      // Handle the response based on your backend API's structure
-      console.log('Submission successful:', response.data);
-
-      // Update the state with the submitted data
-      setSubmittedData((prevData) => [...prevData, response.data.finance]);
-
-      // Clear form fields
-      setItemName('');
-      setItemCost('');
-      setPaymentMethod('');
-      setCategory('');
-    } catch (error) {
-      // Handle errors, e.g., display an error message to the user
-      console.error('Submission failed:', error.response.data);
-    }
-  };
+        let endpoint = '';  // Initialize endpoint variable
+  
+        // Determine the endpoint based on the selected category
+        switch (category) {
+          case 'wants':
+            endpoint = 'http://localhost:4000/want';  // sends to want endpoint
+            break;
+          case 'needs':
+            endpoint = 'http://localhost:4000/need';  // sends to need endpoint
+            break;
+          case 'expenses':
+            endpoint = 'http://localhost:4000/expense';  // sends to expense endpoint 
+            break;
+          default:
+            console.error('Invalid category selected');
+            return;
+        }
+  
+        const response = await axios.post(endpoint, newData);
+  
+        console.log('Submission successful:', response.data);
+  
+        // Update the state with the submitted data
+        setSubmittedData((prevData) => [...prevData, response.data.finance]);
+  
+        // Clear form fields
+        setname('');
+        setamount('');
+        setcard('');
+        setCategory('');
+      } catch (error) {
+        // Handle errors, such as displaying an error message to the user
+        console.error('Submission failed:', error.response.data);
+      }
+};
 
   return (
     <>
@@ -52,38 +70,38 @@ function Finance() {
               <form onSubmit={handleSubmit} className="row g-3">
                 {/* Item Name Textbox */}
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="itemName" className="form-label">Item Name:</label>
+                  <label htmlFor="name" className="form-label">Item Name:</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="itemName"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
+                    id="name"
+                    value={name}
+                    onChange={(e) => setname(e.target.value)}
                     required
                   />
                 </div>
 
-                {/* Item Cost Textbox */}
+                {/* Item amount Textbox */}
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="itemCost" className="form-label">Item Cost:</label>
+                  <label htmlFor="amount" className="form-label">Item amount:</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="itemCost"
-                    value={itemCost}
-                    onChange={(e) => setItemCost(e.target.value)}
+                    id="amount"
+                    value={amount}
+                    onChange={(e) => setamount(e.target.value)}
                     required
                   />
                 </div>
 
                 {/* Payment Method Dropdown */}
                 <div className="col-md-6 mb-3">
-                  <label htmlFor="paymentMethod" className="form-label">Payment Method:</label>
+                  <label htmlFor="card" className="form-label">Payment Method:</label>
                   <select
                     className="form-control"
-                    id="paymentMethod"
-                    value={paymentMethod}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    id="card"
+                    value={card}
+                    onChange={(e) => setcard(e.target.value)}
                     required
                   >
                     <option value="">Select Payment Method</option>
@@ -144,7 +162,7 @@ function Finance() {
                     {submittedData
                       .filter((data) => data.category === 'wants')
                       .map((data, index) => (
-                        <li key={index}>{`Item: ${data.itemName}, Cost: ${data.itemCost}, Payment Method: ${data.paymentMethod}`}</li>
+                        <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
                       ))}
                   </ul>
                 </div>
@@ -157,7 +175,7 @@ function Finance() {
                     {submittedData
                       .filter((data) => data.category === 'needs')
                       .map((data, index) => (
-                        <li key={index}>{`Item: ${data.itemName}, Cost: ${data.itemCost}, Payment Method: ${data.paymentMethod}`}</li>
+                        <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
                       ))}
                   </ul>
                 </div>
@@ -170,7 +188,7 @@ function Finance() {
                     {submittedData
                       .filter((data) => data.category === 'expenses')
                       .map((data, index) => (
-                        <li key={index}>{`Item: ${data.itemName}, Cost: ${data.itemCost}, Payment Method: ${data.paymentMethod}`}</li>
+                        <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
                       ))}
                   </ul>
                 </div>
@@ -182,6 +200,5 @@ function Finance() {
     </>
   );
 }
-
 
 export default Finance;
