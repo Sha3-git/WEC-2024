@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
+  const navigate = useNavigate();
 
   const validateEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,10 +18,23 @@ function LoginPage() {
     }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Add your login logic here
-    console.log('Logging in with:', email, password);
+
+    try {
+      const response = await axios.post('http://localhost:4000/auth', {
+        email: email,
+        password: password,
+      });
+
+      console.log('Login successful:', response.data);
+      if(response.data.status === 200){
+        navigate('/finance')
+      }
+    } catch (error) {
+      
+      console.error('Login failed:', error.response.data);
+    }
   };
 
   return (
