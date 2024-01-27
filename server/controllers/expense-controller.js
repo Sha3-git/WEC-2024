@@ -7,9 +7,8 @@ const expenses = {
         const amount = req.body.amout;
         const card = req.body.card;
         try {
-            const existingExpense = await Expense.findOne({ user_id: id });
             const existingUser = await User.findOne({_id: id})
-            if (!existingExpense && existingUser) {
+            if ( existingUser) {
                 const newProfile = new Expense({
                     user_id: id,
                     name: name,
