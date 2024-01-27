@@ -33,6 +33,7 @@ app.delete('/finance', finance.deleteFinance)
 app.post('/expense', expense.createExpense)
 app.put('/expense', expense.updateExpense)
 app.delete('/expense', expense.deleteExpense)
+app.get('/need', need.getNeeds);
 app.post('/need', need.createNeed);
 app.put('/need', need.updateNeed);
 app.delete('/need', need.deleteNeed);
