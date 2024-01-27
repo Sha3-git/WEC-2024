@@ -23,3 +23,4 @@ const user = require('./controllers/user-controller')
 
 app.get('/users', user.getAllUsers)
 app.post('/register', user.registerUser)
+app.post('/auth', user.authenticateUser)
