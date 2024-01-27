@@ -1,6 +1,15 @@
 const Expense = require('../models/expenses');
 const User = require('../models/users')
 const expenses = {
+    getExpense: async (req, res) => {
+        const id = req.body.id;
+        try {
+        const expense = await Expense.find({ user_id: id })
+        res.json({expense: expense})
+        } catch (error) {
+           console.log(error) 
+        }
+    },
     createExpense: async (req, res) => {
         const id = req.body.id;
         const name = req.body.name;

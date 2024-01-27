@@ -30,6 +30,7 @@ app.post('/auth', user.authenticateUser)
 app.post('/finance', finance.createFinance)
 app.put('/finance', finance.updateFinance)
 app.delete('/finance', finance.deleteFinance)
+app.get('/expense', expense.getExpense)
 app.post('/expense', expense.createExpense)
 app.put('/expense', expense.updateExpense)
 app.delete('/expense', expense.deleteExpense)
@@ -37,6 +38,7 @@ app.get('/need', need.getNeeds);
 app.post('/need', need.createNeed);
 app.put('/need', need.updateNeed);
 app.delete('/need', need.deleteNeed);
+app.get('/want', want.getWants);
 app.post('/want', want.createWant);
 app.put('/want', want.updateWant);
 app.delete('/want', want.deleteWant);
