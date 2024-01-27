@@ -5,7 +5,7 @@ const wants = {
     getWants: async (req, res) => {
         const id = req.body.id;
         try {
-            const needs = await Want.find({ user_id: id })
+            const wants = await Want.find({ user_id: id })
             res.json({ wants: wants })
         } catch (error) {
             console.log(error)
