@@ -1,22 +1,22 @@
 const Need = require('../models/need');
-const user = require('../models/users');
+const User = require('../models/users');
 
 const needs = {
   createNeed: async (req, res) => {
     const id = req.body.id;
     const name = req.body.name;
     const amount = req.body.amount; // Corrected typo in property name
-    const description = req.body.description;
+    const card = req.body.card;
 
     try {
       const existingUser = await User.findOne({ _id: id });
 
       if (existingUser) {
         const newNeed = new Need({
-          user_id: id,
-          name: name,
-          amount: amount,
-          description: description,
+            user_id: id,
+            name: name,
+            amount: amount,
+            card: card,
         });
 
         await newNeed.save();
@@ -34,13 +34,13 @@ const needs = {
     const id = req.body.id;
     const name = req.body.name;
     const amount = req.body.amount;
-    const description = req.body.description;
+    const card = req.body.card;
 
     try {
       const existingNeed = await Need.findOne({ user_id: id });
 
       if (existingNeed) {
-        await Need.updateOne({ user_id: id }, { $set: { name: name, amount: amount, description: description } });
+        await Need.updateOne({ user_id: id }, { $set: { name: name, amount: amount, card: card } });
         res.json({ status: 200, need: existingNeed });
       } else {
         res.json({ status: 400, error: 'user for this need profile does not exist' });
