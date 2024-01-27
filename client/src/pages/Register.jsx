@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [confirmEmailError, setConfirmEmailError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -20,23 +20,23 @@ function Register() {
     }
   };
 
-  const validateConfirmEmail = () => {
-    if (confirmEmail !== email) {
-      setConfirmEmailError('Email addresses do not match');
+  const validateConfirmPassword = () => {
+    if (confirmPassword !== password) {
+      setConfirmPasswordError('Passwords do not match');
     } else {
-      setConfirmEmailError('');
+      setConfirmPasswordError('');
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Validate email and confirm email
+    //validate email and confirm password
     validateEmail();
-    validateConfirmEmail();
+    validateConfirmPassword();
 
-    // Check if there are any errors before proceeding with registration
-    if (emailError || confirmEmailError) {
+    //check if there are any errors before proceeding with registration
+    if (emailError || confirmPasswordError) {
       return;
     }
 
@@ -46,13 +46,13 @@ function Register() {
         password: password,
       });
 
-      // Handle the response based on your backend API's structure
+      //handle the response based on your backend API's structure
       console.log('Registration successful:', response.data);
       if(response.data.status === 200){
         navigate('/login')
       }
     } catch (error) {
-      // Handle errors, e.g., display an error message to the user
+      //handle errors, such as display an error message to the user
       console.error('Registration failed:', error.response.data);
     }
   };
@@ -84,20 +84,6 @@ function Register() {
                     {emailError && <div className="invalid-feedback">{emailError}</div>}
                   </div>
                   <div className="form-group mb-4">
-                    <label htmlFor="confirmEmail">Confirm Email:</label>
-                    <input
-                      type="email"
-                      className={`form-control ${confirmEmailError ? 'is-invalid' : ''}`}
-                      id="confirmEmail"
-                      placeholder="Confirm your email"
-                      value={confirmEmail}
-                      onBlur={validateConfirmEmail}
-                      onChange={(e) => setConfirmEmail(e.target.value)}
-                      required
-                    />
-                    {confirmEmailError && <div className="invalid-feedback">{confirmEmailError}</div>}
-                  </div>
-                  <div className="form-group mb-4">
                     <label htmlFor="password">Password:</label>
                     <input
                       type="password"
@@ -108,6 +94,20 @@ function Register() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                     />
+                  </div>
+                  <div className="form-group mb-4">
+                    <label htmlFor="confirmPassword">Confirm Password:</label>
+                    <input
+                      type="password"
+                      className={`form-control ${confirmPasswordError ? 'is-invalid' : ''}`}
+                      id="confirmPassword"
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onBlur={validateConfirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    {confirmPasswordError && <div className="invalid-feedback">{confirmPasswordError}</div>}
                   </div>
                   <button type="submit" className="btn btn-dark btn-block">
                     Register
