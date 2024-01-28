@@ -3,7 +3,8 @@ const User = require('../models/users');
 
 const wants = {
     getWants: async (req, res) => {
-        const id = req.body.id;
+        console.log(req.body)
+        const id = req.params.id;
         try {
             const wants = await Want.find({ user_id: id })
             res.json({ wants: wants })

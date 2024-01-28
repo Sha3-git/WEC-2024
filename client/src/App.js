@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login'
 import Register from './pages/Register'
 import FinanceTracker from './pages/FinanceTracker'
-
+import Piechart from './components/piechart.jsx';
 function App() {
 
  
@@ -17,6 +17,7 @@ function App() {
           <Route path='/login' element={<Login />}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/finance' element={<FinanceTracker />}/>
+          <Route path='/p' element={<Piechart />}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -2,7 +2,7 @@ const Expense = require('../models/expenses');
 const User = require('../models/users')
 const expenses = {
     getExpense: async (req, res) => {
-        const id = req.body.id;
+        const id = req.params.id;
         try {
         const expense = await Expense.find({ user_id: id })
         res.json({expense: expense})
@@ -13,7 +13,7 @@ const expenses = {
     createExpense: async (req, res) => {
         const id = req.body.id;
         const name = req.body.name;
-        const amount = req.body.amout;
+        const amount = req.body.amount;
         const card = req.body.card;
         try {
             const existingUser = await User.findOne({_id: id})
