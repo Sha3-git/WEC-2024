@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
 
@@ -12,6 +12,28 @@ function Finance() {
   const [showWantsData, setShowWantsData] = useState(false);
   const [showNeedsData, setShowNeedsData] = useState(false);
   const [showExpensesData, setShowExpensesData] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch wants data
+        const wantsResponse = await axios.get(`http://localhost:4000/want/${id}`);
+        setSubmittedData((prevData) => [...prevData, ...wantsResponse.data.wants]);
+
+        // Fetch needs data
+        const needsResponse = await axios.get(`http://localhost:4000/need/${id}`);
+        setSubmittedData((prevData) => [...prevData, ...needsResponse.data.needs]);
+
+        // Fetch expenses data
+        const expensesResponse = await axios.get(`http://localhost:4000/expense/${id}`);
+        setSubmittedData((prevData) => [...prevData, ...expensesResponse.data.expense]);
+      } catch (error) {
+        console.error('Data fetch failed:', error);
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,7 +57,7 @@ function Finance() {
             endpoint = 'http://localhost:4000/need';  // sends to need endpoint
             break;
           case 'expenses':
-            endpoint = 'http://localhost:4000/expense';  // sends to expense endpoint 
+            endpoint = 'http://localhost:4000/expense';  // sends to expense endpoint
             break;
           default:
             console.error('Invalid category selected');
@@ -160,7 +182,7 @@ function Finance() {
                   <h5>Wants Data:</h5>
                   <ul>
                     {submittedData
-                      .filter((data) => data.category === 'wants')
+                      
                       .map((data, index) => (
                         <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
                       ))}
