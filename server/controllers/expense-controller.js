@@ -1,3 +1,5 @@
+//Expense Controller
+
 const Expense = require('../models/expenses');
 const User = require('../models/users')
 const expenses = {

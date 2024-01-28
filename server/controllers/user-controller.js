@@ -1,4 +1,5 @@
 
+//User controller
 const User = require('../models/users');
 
 const users = {

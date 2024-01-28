@@ -1,3 +1,4 @@
+// Want controller
 const Want = require('../models/wants'); 
 const User = require('../models/users');
 

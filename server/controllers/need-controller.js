@@ -1,3 +1,4 @@
+//need controller
 const Need = require('../models/need');
 const User = require('../models/users');
 
@@ -14,7 +15,7 @@ const needs = {
     createNeed: async (req, res) => {
         const id = req.body.id;
         const name = req.body.name;
-        const amount = req.body.amount; // Corrected typo in property name
+        const amount = req.body.amount; 
         const card = req.body.card;
 
         try {
