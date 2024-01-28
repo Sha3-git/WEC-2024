@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
+import Piechart from '../components/piechart';
 
 function Finance() {
   const id = localStorage.getItem('id');
@@ -219,6 +220,7 @@ function Finance() {
           </div>
         </div>
       </div>
+      <Piechart />
     </>
   );
 }
