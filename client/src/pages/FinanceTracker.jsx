@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import axios from 'axios';
 import Piechart from '../components/piechart';
+import Rows from '../components/Rows.jsx';
+import FullFeaturedCrudGrid from '../components/Rows.jsx';
 
 function Finance() {
   const id = localStorage.getItem('id');
@@ -13,6 +15,9 @@ function Finance() {
   const [showWantsData, setShowWantsData] = useState(false);
   const [showNeedsData, setShowNeedsData] = useState(false);
   const [showExpensesData, setShowExpensesData] = useState(false);
+  const [wants, setWants] = useState([]);
+  const [needs, setNeeds] = useState([]);
+  const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,14 +25,16 @@ function Finance() {
         // Fetch wants data
         const wantsResponse = await axios.get(`http://localhost:4000/want/${id}`);
         setSubmittedData((prevData) => [...prevData, ...wantsResponse.data.wants]);
-
+        setWants(wantsResponse.data.wants);
         // Fetch needs data
         const needsResponse = await axios.get(`http://localhost:4000/need/${id}`);
         setSubmittedData((prevData) => [...prevData, ...needsResponse.data.needs]);
-
+        setNeeds(needsResponse.data.needs);
         // Fetch expenses data
         const expensesResponse = await axios.get(`http://localhost:4000/expense/${id}`);
         setSubmittedData((prevData) => [...prevData, ...expensesResponse.data.expense]);
+        setExpenses(expensesResponse.data.expense);
+        console.log(wantsResponse, needsResponse, expensesResponse);
       } catch (error) {
         console.error('Data fetch failed:', error);
       }
@@ -47,41 +54,41 @@ function Finance() {
     };
 
     try {
-        let endpoint = '';  // Initialize endpoint variable
-  
-        // Determine the endpoint based on the selected category
-        switch (category) {
-          case 'wants':
-            endpoint = 'http://localhost:4000/want';  // sends to want endpoint
-            break;
-          case 'needs':
-            endpoint = 'http://localhost:4000/need';  // sends to need endpoint
-            break;
-          case 'expenses':
-            endpoint = 'http://localhost:4000/expense';  // sends to expense endpoint
-            break;
-          default:
-            console.error('Invalid category selected');
-            return;
-        }
-  
-        const response = await axios.post(endpoint, newData);
-  
-        console.log('Submission successful:', response.data);
-  
-        // Update the state with the submitted data
-        setSubmittedData((prevData) => [...prevData, response.data.finance]);
-  
-        // Clear form fields
-        setname('');
-        setamount('');
-        setcard('');
-        setCategory('');
-      } catch (error) {
-        // Handle errors, such as displaying an error message to the user
-        console.error('Submission failed:', error.response.data);
+      let endpoint = '';  // Initialize endpoint variable
+
+      // Determine the endpoint based on the selected category
+      switch (category) {
+        case 'wants':
+          endpoint = 'http://localhost:4000/want';  // sends to want endpoint
+          break;
+        case 'needs':
+          endpoint = 'http://localhost:4000/need';  // sends to need endpoint
+          break;
+        case 'expenses':
+          endpoint = 'http://localhost:4000/expense';  // sends to expense endpoint
+          break;
+        default:
+          console.error('Invalid category selected');
+          return;
       }
-};
+
+      const response = await axios.post(endpoint, newData);
+
+      console.log('Submission successful:', response.data);
+
+      // Update the state with the submitted data
+      setSubmittedData((prevData) => [...prevData, response.data.finance]);
+
+      // Clear form fields
+      setname('');
+      setamount('');
+      setcard('');
+      setCategory('');
+    } catch (error) {
+      // Handle errors, such as displaying an error message to the user
+      console.error('Submission failed:', error.response.data);
+    }
+  };
 
   return (
     <>
@@ -155,7 +162,7 @@ function Finance() {
                   <button type="submit" className="btn btn-primary w-100">Submit</button>
                 </div>
               </form>
-            {/* Toggle Buttons for Displaying Data */}
+              {/* Toggle Buttons for Displaying Data */}
               <div className="mt-4">
                 <button
                   className="btn btn-info mx-1"
@@ -182,11 +189,9 @@ function Finance() {
                 <div className="mt-4">
                   <h5>Wants Data:</h5>
                   <ul>
-                    {submittedData
-                      
-                      .map((data, index) => (
-                        <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
-                      ))}
+                    {wants.map((data, index) => (
+                      <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -195,11 +200,9 @@ function Finance() {
                 <div className="mt-4">
                   <h5>Needs Data:</h5>
                   <ul>
-                    {submittedData
-                      .filter((data) => data.category === 'needs')
-                      .map((data, index) => (
-                        <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
-                      ))}
+                    {needs.map((data, index) => (
+                      <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
+                    ))}
                   </ul>
                 </div>
               )}
@@ -208,8 +211,7 @@ function Finance() {
                 <div className="mt-4">
                   <h5>Expenses Data:</h5>
                   <ul>
-                    {submittedData
-                      .filter((data) => data.category === 'expenses')
+                    {expenses
                       .map((data, index) => (
                         <li key={index}>{`Item: ${data.name}, amount: ${data.amount}, Payment Method: ${data.card}`}</li>
                       ))}
@@ -221,6 +223,9 @@ function Finance() {
         </div>
       </div>
       <Piechart />
+      <div className="container d-flex justify-content-center p-5">
+        <FullFeaturedCrudGrid id={id} wants={wants} expenses={expenses} needs={needs} showExpensesData={showExpensesData} showNeedsData={showNeedsData} showWantsData={showWantsData} />
+      </div>
     </>
   );
 }
